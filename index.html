@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Cassette</title>
+    <style>
+      .button.pressed {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        top: -210px;
+      }
+      @keyframes spin-hub {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .is-playing .white-hub {
+        animation: spin-hub 3s linear infinite;
+      }
+
+      .is-forwarding .white-hub {
+        animation: spin-hub 0.5s linear infinite !important;
+      }
+
+      .is-rewinding .white-hub {
+        animation: spin-hub 0.5s linear infinite reverse !important;
+      }
+    </style>
+  </head>
+  <body class="grainy-background">
+    <div class="content">
+      <div class="player">
+        <div class="button pause" id="btn-pause">PAUSE</div>
+        <div class="button back" id="btn-back">BACK</div>
+        <div class="button forward" id="btn-fwd">FORWARD</div>
+        <div class="button play" id="btn-play">PLAY</div>
+        <div class="text">BORN FOR MUSIC</div>
+        <div class="cassette" id="cassette-tape">
+          <div class="disc circle1">
+            <div class="inner-silver-ring">
+              <div class="white-hub">
+                <div class="spoke s1"></div>
+                <div class="spoke s2"></div>
+                <div class="spoke s3"></div>
+                <div class="center-hole"></div>
+              </div>
+            </div>
+          </div>
+          <div class="disc circle2">
+            <div class="inner-silver-ring">
+              <div class="white-hub">
+                <div class="spoke s1"></div>
+                <div class="spoke s2"></div>
+                <div class="spoke s3"></div>
+                <div class="center-hole"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const playBtn = document.getElementById("btn-play");
+      const pauseBtn = document.getElementById("btn-pause");
+      const fwdBtn = document.getElementById("btn-fwd");
+      const backBtn = document.getElementById("btn-back");
+      const cassetteTape = document.getElementById("cassette-tape");
+
+      playBtn.addEventListener("click", () => {
+        playBtn.classList.add("pressed");
+        cassetteTape.classList.add("is-playing");
+      });
+
+      pauseBtn.addEventListener("mousedown", () => {
+        pauseBtn.classList.add("pressed");
+        playBtn.classList.remove("pressed");
+        cassetteTape.classList.remove(
+          "is-playing",
+          "is-forwarding",
+          "is-rewinding",
+        );
+      });
+
+      const stopPause = () => {
+        pauseBtn.classList.remove("pressed");
+      };
+      pauseBtn.addEventListener("mouseup", stopPause);
+      pauseBtn.addEventListener("mouseleave", stopPause);
+
+      fwdBtn.addEventListener("mousedown", () => {
+        fwdBtn.classList.add("pressed");
+        playBtn.classList.remove("pressed");
+        cassetteTape.classList.remove("is-playing");
+        cassetteTape.classList.add("is-forwarding");
+      });
+
+      const stopForward = () => {
+        fwdBtn.classList.remove("pressed");
+        cassetteTape.classList.remove("is-forwarding");
+      };
+      fwdBtn.addEventListener("mouseup", stopForward);
+      fwdBtn.addEventListener("mouseleave", stopForward);
+
+      backBtn.addEventListener("mousedown", () => {
+        backBtn.classList.add("pressed");
+        playBtn.classList.remove("pressed");
+        cassetteTape.classList.remove("is-playing");
+        cassetteTape.classList.add("is-rewinding");
+      });
+
+      const stopBackward = () => {
+        backBtn.classList.remove("pressed");
+        cassetteTape.classList.remove("is-rewinding");
+      };
+      backBtn.addEventListener("mouseup", stopBackward);
+      backBtn.addEventListener("mouseleave", stopBackward);
+    </script>
+  </body>
+</html>
