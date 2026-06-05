@@ -30,9 +30,105 @@
       animation: spin-hub 0.5s linear infinite reverse !important;
     }
 
-    .button:focus-visible {
-      outline: 2px solid blue;
+    .volume {
+      height: 70px;
+      width: 14px;
+
+      position: absolute;
+      top: 90px;
+      right: -10px;
+      background: black;
+
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+
+      z-index: -1;
+      user-select: none;
     }
+
+    .knob {
+      position: relative;
+      height: 80px;
+      width: 14px;
+      bottom: 5px;
+      right: -9px;
+      border-radius: 3px;
+      background: linear-gradient(135deg, #999, #888);
+
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+
+      box-shadow: 5px 10px 20px #424242;
+    }
+
+    .slider {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 7px;
+      width: 14px;
+    }
+
+    .notch {
+      position: relative;
+      height: 3px;
+      width: 12px;
+      border-radius: 3px;
+      background-color: black;
+    }
+
+   .volume-popup {
+      position: fixed;
+      right: 30px;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 15px 25px;
+      font-family: Arial, Helvetica, sans-serif;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .volume-popup.show {
+      opacity: 1;
+    }
+
+    .volume-popup .volume-value {
+      letter-spacing: 1px;
+    }
+
+    .volume-popup .volume-bar {
+      width: 10px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .volume-popup .volume-fill {
+      width: 100%;
+      background: linear-gradient(180deg, #ff5722, #ff8c42);
+      border-radius: 2px;
+      transition: height 0.05s linear;
+      height: 0%;
+    }
+    
   </style>
 </head>
 
@@ -45,6 +141,15 @@
         <div class="button forward" id="btn-fwd">FORWARD</div>
         <div class="button play" id="btn-play">PLAY</div>
         <div class="text">BORN FOR MUSIC</div>
+
+        <div class="volume">
+          <div class="knob" id="vlm-knob">
+            <div class="slider" id="vlm-slider">
+              <div class="notch"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="cassette" id="cassette-tape">
           <div class="disc circle1">
             <div class="inner-silver-ring">
@@ -67,6 +172,16 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+
+    <div class="volume-popup" id="volume-popup">
+      <div>
+        <span class="volume-value" id="volume-value">0%</span>
+      </div>
+      <div class="volume-bar">
+        <div class="volume-fill" id="volume-fill"></div>
       </div>
     </div>
 
@@ -149,8 +264,6 @@
           activateForward();
         } else if (e.code === "ArrowLeft") {
           activateBackward();
-        } else if (e.code === "KeyP" || e.code === "Enter") {
-          activatePlay();
         }
       });
 
@@ -164,6 +277,62 @@
           stopBackward();
         }
       });
+
+      const slider = document.getElementById("vlm-slider");
+      const knob = document.getElementById("vlm-knob");
+      const volumePopup = document.getElementById("volume-popup");
+      const volumeValue = document.getElementById("volume-value");
+      const volumeFill = document.getElementById("volume-fill");
+
+      let hidePopupTimeout;
+
+      function showVolumePopup() {
+        volumePopup.classList.add("show");
+        clearTimeout(hidePopupTimeout);
+        hidePopupTimeout = setTimeout(() => {
+          volumePopup.classList.remove("show");
+        }, 1500);
+      }
+
+     function updateVolumeDisplay(percentage) {
+        volumeValue.textContent = Math.round(percentage) + "%";
+        // For vertical bar, height represents volume (0% at bottom, 100% at top)
+        volumeFill.style.height = percentage + "%";
+      }
+
+      knob.onmousedown = (event) => {
+        event.preventDefault();
+        if (event.button !== 0) return;
+
+        const maxTop = knob.clientHeight - slider.clientHeight;
+        const startY = event.clientY;
+        const startTop = parseFloat(slider.style.top) || 0;
+
+        function moveTo(event) {
+          let newTop = startTop + (event.clientY - startY);
+          if (newTop > maxTop) newTop = maxTop;
+          if (newTop < 0) newTop = 0;
+          slider.style.top = newTop + "px";
+
+          const percentage = ((maxTop - newTop) / maxTop) * 100;
+          updateVolumeDisplay(percentage);
+          showVolumePopup();
+        }
+
+        function onMouseUp(event) {
+          if (event.button !== 0) return;
+          document.removeEventListener("mousemove", moveTo);
+          document.removeEventListener("mouseup", onMouseUp);
+        }
+
+        document.addEventListener("mousemove", moveTo);
+        document.addEventListener("mouseup", onMouseUp);
+
+        const currentTop = parseFloat(slider.style.top) || 0;
+        const currentPercentage = ((maxTop - currentTop) / maxTop) * 100;
+        updateVolumeDisplay(currentPercentage);
+        showVolumePopup();
+      };
     </script>
 </body>
 
