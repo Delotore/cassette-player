@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -6,334 +6,272 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
   <title>Cassette</title>
-  <style>
-    .button.pressed {
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-      top: -210px;
-    }
-
-    @keyframes spin-hub {
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    .is-playing .white-hub {
-      animation: spin-hub 3s linear infinite;
-    }
-
-    .is-forwarding .white-hub {
-      animation: spin-hub 0.5s linear infinite !important;
-    }
-
-    .is-rewinding .white-hub {
-      animation: spin-hub 0.5s linear infinite reverse !important;
-    }
-
-    .volume {
-      height: 70px;
-      width: 14px;
-
-      position: absolute;
-      top: 90px;
-      right: -10px;
-      background: black;
-
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      border-bottom: 2px solid rgba(0, 0, 0, 0.2);
-
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-
-      z-index: -1;
-      user-select: none;
-    }
-
-    .knob {
-      position: relative;
-      height: 80px;
-      width: 14px;
-      bottom: 5px;
-      right: -9px;
-      border-radius: 3px;
-      background: linear-gradient(135deg, #999, #888);
-
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      border-bottom: 2px solid rgba(0, 0, 0, 0.2);
-
-      box-shadow: 5px 10px 20px #424242;
-    }
-
-    .slider {
-      position: absolute;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 7px;
-      width: 14px;
-    }
-
-    .notch {
-      position: relative;
-      height: 3px;
-      width: 12px;
-      border-radius: 3px;
-      background-color: black;
-    }
-
-   .volume-popup {
-      position: fixed;
-      right: 30px;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(10px);
-      border-radius: 10px;
-      padding: 15px 25px;
-      font-family: Arial, Helvetica, sans-serif;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-      z-index: 1000;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-      pointer-events: none;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      min-width: 120px;
-      text-align: center;
-    }
-
-    .volume-popup.show {
-      opacity: 1;
-    }
-
-    .volume-popup .volume-value {
-      letter-spacing: 1px;
-    }
-
-    .volume-popup .volume-bar {
-      width: 10px;
-      height: 200px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 2px;
-      margin-top: 8px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-    }
-
-    .volume-popup .volume-fill {
-      width: 100%;
-      background: linear-gradient(180deg, #ff5722, #ff8c42);
-      border-radius: 2px;
-      transition: height 0.05s linear;
-      height: 0%;
-    }
-    
-  </style>
 </head>
 
 <body class="grainy-background">
   <div class="content">
+
     <div class="player">
-      <div class="player">
-        <div class="button pause" id="btn-pause">PAUSE</div>
-        <div class="button back" id="btn-back">BACK</div>
-        <div class="button forward" id="btn-fwd">FORWARD</div>
-        <div class="button play" id="btn-play">PLAY</div>
-        <div class="text">BORN FOR MUSIC</div>
+      <div class="button pause" id="btn-pause">PAUSE</div>
+      <div class="button back" id="btn-back">BACK</div>
+      <div class="button forward" id="btn-fwd">FORWARD</div>
+      <div class="button play" id="btn-play">PLAY</div>
+      <div class="text">BORN FOR MUSIC</div>
 
-        <div class="volume">
-          <div class="knob" id="vlm-knob">
-            <div class="slider" id="vlm-slider">
-              <div class="notch"></div>
+      <div class="volume">
+        <div class="knob" id="vlm-knob">
+          <div class="slider" id="vlm-slider">
+            <div class="notch"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cassette" id="cassette-tape">
+        <div class="disc circle1">
+          <div class="inner-silver-ring">
+            <div class="white-hub">
+              <div class="spoke s1"></div>
+              <div class="spoke s2"></div>
+              <div class="spoke s3"></div>
+              <div class="center-hole"></div>
             </div>
           </div>
         </div>
-
-        <div class="cassette" id="cassette-tape">
-          <div class="disc circle1">
-            <div class="inner-silver-ring">
-              <div class="white-hub">
-                <div class="spoke s1"></div>
-                <div class="spoke s2"></div>
-                <div class="spoke s3"></div>
-                <div class="center-hole"></div>
-              </div>
-            </div>
-          </div>
-          <div class="disc circle2">
-            <div class="inner-silver-ring">
-              <div class="white-hub">
-                <div class="spoke s1"></div>
-                <div class="spoke s2"></div>
-                <div class="spoke s3"></div>
-                <div class="center-hole"></div>
-              </div>
+        <div class="disc circle2">
+          <div class="inner-silver-ring">
+            <div class="white-hub">
+              <div class="spoke s1"></div>
+              <div class="spoke s2"></div>
+              <div class="spoke s3"></div>
+              <div class="center-hole"></div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-
-    <div class="volume-popup" id="volume-popup">
-      <div>
-        <span class="volume-value" id="volume-value">0%</span>
-      </div>
-      <div class="volume-bar">
-        <div class="volume-fill" id="volume-fill"></div>
-      </div>
+    <div class="progress-wrapper" id="progress-wrapper">
+      <div class="progress-bar" id="progress-bar"></div>
     </div>
 
-    <script>
-      const playBtn = document.getElementById("btn-play");
-      const pauseBtn = document.getElementById("btn-pause");
-      const fwdBtn = document.getElementById("btn-fwd");
-      const backBtn = document.getElementById("btn-back");
-      const cassetteTape = document.getElementById("cassette-tape");
+  </div>
 
+  <div class="volume-popup" id="vlm-popup">
+    <div>
+      <span class="volume-value" id="vlm-value">0</span>
+    </div>
+    <div class="volume-bar">
+      <div class="volume-fill" id="vlm-fill"></div>
+    </div>
+  </div>
 
-      const activatePlay = () => {
-        playBtn.classList.add("pressed");
-        cassetteTape.classList.add("is-playing");
-      }
+  <script>
+    const playBtn = document.getElementById("btn-play");
+    const pauseBtn = document.getElementById("btn-pause");
+    const fwdBtn = document.getElementById("btn-fwd");
+    const backBtn = document.getElementById("btn-back");
+    const cassetteTape = document.getElementById("cassette-tape");
+    const progressWrapper = document.getElementById("progress-wrapper");
+    const progressBar = document.getElementById("progress-bar");
 
-      playBtn.addEventListener("click", activatePlay)
+    let progress = 0;
+    let progressInterval = null;
+    let isScrubbing = false;
 
+    const setProgressSpeed = (speedStep) => {
+      clearInterval(progressInterval);
+      if (speedStep === 0) return;
 
-      const activatePause = () => {
-        pauseBtn.classList.add("pressed");
-        playBtn.classList.remove("pressed");
-        cassetteTape.classList.remove(
-          "is-playing",
-          "is-forwarding",
-          "is-rewinding",
-        );
-      };
+      progressInterval = setInterval(() => {
+        if (isScrubbing) return;
 
-      const stopPause = () => {
-        pauseBtn.classList.remove("pressed");
-      };
+        progress += speedStep;
 
-      pauseBtn.addEventListener("mousedown", activatePause)
-      pauseBtn.addEventListener("mouseup", stopPause);
-      pauseBtn.addEventListener("mouseleave", stopPause);
+        if (progress >= 100) {
+          progress = 100;
+          activatePause();
+        } else if (progress <= 0) {
+          progress = 0;
+          activatePause();
+        }
 
+        progressBar.style.width = progress + "%";
+      }, 50);
+    };
 
+    const activatePlay = () => {
+      if (progress >= 100) progress = 0;
+      playBtn.classList.add("pressed");
+      pauseBtn.classList.remove("pressed");
+      cassetteTape.classList.remove("is-forwarding", "is-rewinding");
+      cassetteTape.classList.add("is-playing");
+      setProgressSpeed(0.07);
+    };
 
-      const activateForward = () => {
-        fwdBtn.classList.add("pressed");
-        cassetteTape.classList.remove("is-playing");
-        cassetteTape.classList.add("is-forwarding");
-      };
+    const activatePause = () => {
+      pauseBtn.classList.add("pressed");
+      playBtn.classList.remove("pressed");
+      cassetteTape.classList.remove("is-playing", "is-forwarding", "is-rewinding");
+      setProgressSpeed(0);
+    };
 
-      const stopForward = () => {
-        fwdBtn.classList.remove("pressed");
-        cassetteTape.classList.remove("is-forwarding");
-      };
-      fwdBtn.addEventListener("mousedown", activateForward);
-      fwdBtn.addEventListener("mouseup", stopForward);
-      fwdBtn.addEventListener("mouseleave", stopForward);
+    const stopPause = () => {
+      pauseBtn.classList.remove("pressed");
+    };
 
+    const activateForward = () => {
+      fwdBtn.classList.add("pressed");
+      cassetteTape.classList.remove("is-playing");
+      cassetteTape.classList.add("is-forwarding");
+      setProgressSpeed(1.5);
+    };
 
+    const stopForward = () => {
+      fwdBtn.classList.remove("pressed");
+      cassetteTape.classList.remove("is-forwarding");
+      setProgressSpeed(0);
+    };
 
-      const activateBackward = () => {
-        backBtn.classList.add("pressed");
-        cassetteTape.classList.remove("is-playing");
-        cassetteTape.classList.add("is-rewinding");
-      };
+    const activateBackward = () => {
+      backBtn.classList.add("pressed");
+      cassetteTape.classList.remove("is-playing");
+      cassetteTape.classList.add("is-rewinding");
+      setProgressSpeed(-1.5);
+    };
 
-      const stopBackward = () => {
-        backBtn.classList.remove("pressed");
-        cassetteTape.classList.remove("is-rewinding");
-      };
+    const stopBackward = () => {
+      backBtn.classList.remove("pressed");
+      cassetteTape.classList.remove("is-rewinding");
+      setProgressSpeed(0);
+    };
 
-      backBtn.addEventListener("mousedown", activateBackward);
-      backBtn.addEventListener("mouseup", stopBackward);
-      backBtn.addEventListener("mouseleave", stopBackward);
+    playBtn.addEventListener("click", activatePlay);
 
+    pauseBtn.addEventListener("mousedown", activatePause);
+    pauseBtn.addEventListener("mouseup", stopPause);
+    pauseBtn.addEventListener("mouseleave", stopPause);
 
+    fwdBtn.addEventListener("mousedown", activateForward);
+    fwdBtn.addEventListener("mouseup", stopForward);
+    fwdBtn.addEventListener("mouseleave", stopForward);
 
-      document.body.addEventListener("keydown", (e) => {
+    backBtn.addEventListener("mousedown", activateBackward);
+    backBtn.addEventListener("mouseup", stopBackward);
+    backBtn.addEventListener("mouseleave", stopBackward);
+
+    document.body.addEventListener("keydown", (e) => {
+      if (e.repeat) return;
+
+      if (["Space", "ArrowRight", "ArrowLeft"].includes(e.code)) {
         e.preventDefault();
-        if (e.repeat) return;
-        if (e.code === "Space") {
-          if (playBtn.classList.contains("pressed")) activatePause();
-          else activatePlay();
-        } else if (e.code === "ArrowRight") {
-          activateForward();
-        } else if (e.code === "ArrowLeft") {
-          activateBackward();
-        }
-      });
+      }
 
-      document.body.addEventListener("keyup", (e) => {
+      if (e.code === "Space") {
+        if (playBtn.classList.contains("pressed")) activatePause();
+        else activatePlay();
+      } else if (e.code === "ArrowRight") {
+        activateForward();
+      } else if (e.code === "ArrowLeft") {
+        activateBackward();
+      }
+    });
+
+    document.body.addEventListener("keyup", (e) => {
+      if (["Space", "ArrowRight", "ArrowLeft"].includes(e.code)) {
         e.preventDefault();
-        if (e.code === "Space") {
-          stopPause();
-        } else if (e.code === "ArrowRight") {
-          stopForward();
-        } else if (e.code === "ArrowLeft") {
-          stopBackward();
-        }
-      });
-
-      const slider = document.getElementById("vlm-slider");
-      const knob = document.getElementById("vlm-knob");
-      const volumePopup = document.getElementById("volume-popup");
-      const volumeValue = document.getElementById("volume-value");
-      const volumeFill = document.getElementById("volume-fill");
-
-      let hidePopupTimeout;
-
-      function showVolumePopup() {
-        volumePopup.classList.add("show");
-        clearTimeout(hidePopupTimeout);
-        hidePopupTimeout = setTimeout(() => {
-          volumePopup.classList.remove("show");
-        }, 1500);
       }
 
-     function updateVolumeDisplay(percentage) {
-        volumeValue.textContent = Math.round(percentage) + "%";
-        // For vertical bar, height represents volume (0% at bottom, 100% at top)
-        volumeFill.style.height = percentage + "%";
+      if (e.code === "Space") {
+        stopPause();
+      } else if (e.code === "ArrowRight") {
+        stopForward();
+      } else if (e.code === "ArrowLeft") {
+        stopBackward();
       }
+    });
 
-      knob.onmousedown = (event) => {
-        event.preventDefault();
-        if (event.button !== 0) return;
+    function handleScrub(e) {
+      const rect = progressWrapper.getBoundingClientRect();
+      let x = e.clientX - rect.left;
+      x = Math.max(0, Math.min(x, rect.width));
 
-        const maxTop = knob.clientHeight - slider.clientHeight;
-        const startY = event.clientY;
-        const startTop = parseFloat(slider.style.top) || 0;
+      progress = (x / rect.width) * 100;
+      progressBar.style.width = progress + "%";
 
-        function moveTo(event) {
-          let newTop = startTop + (event.clientY - startY);
-          if (newTop > maxTop) newTop = maxTop;
-          if (newTop < 0) newTop = 0;
-          slider.style.top = newTop + "px";
+      if (progress >= 100 || progress <= 0) {
+        activatePause();
+      }
+    }
 
-          const percentage = ((maxTop - newTop) / maxTop) * 100;
-          updateVolumeDisplay(percentage);
-          showVolumePopup();
-        }
+    progressWrapper.addEventListener('mousedown', (e) => {
+      isScrubbing = true;
+      activatePause();
+      handleScrub(e);
+    });
 
-        function onMouseUp(event) {
-          if (event.button !== 0) return;
-          document.removeEventListener("mousemove", moveTo);
-          document.removeEventListener("mouseup", onMouseUp);
-        }
+    document.addEventListener('mousemove', (e) => {
+      if (isScrubbing) handleScrub(e);
+    });
 
-        document.addEventListener("mousemove", moveTo);
-        document.addEventListener("mouseup", onMouseUp);
+    document.addEventListener('mouseup', () => {
+      isScrubbing = false;
+    });
 
-        const currentTop = parseFloat(slider.style.top) || 0;
-        const currentPercentage = ((maxTop - currentTop) / maxTop) * 100;
-        updateVolumeDisplay(currentPercentage);
+    const slider = document.getElementById("vlm-slider");
+    const knob = document.getElementById("vlm-knob");
+    const volumePopup = document.getElementById("vlm-popup");
+    const volumeValue = document.getElementById("vlm-value");
+    const volumeFill = document.getElementById("vlm-fill");
+
+    let hidePopupTimeout;
+
+    function showVolumePopup() {
+      volumePopup.classList.add("show");
+      clearTimeout(hidePopupTimeout);
+      hidePopupTimeout = setTimeout(() => {
+        volumePopup.classList.remove("show");
+      }, 1500);
+    }
+
+    function updateVolumeDisplay(percentage) {
+      volumeValue.textContent = Math.round(percentage);
+      volumeFill.style.height = percentage + "%";
+    }
+
+    knob.onmousedown = (event) => {
+      event.preventDefault();
+      if (event.button !== 0) return;
+
+      const maxTop = knob.clientHeight - slider.clientHeight;
+      const startY = event.clientY;
+      const startTop = parseFloat(slider.style.top) || 0;
+
+      function moveTo(e) {
+        let newTop = startTop + (e.clientY - startY);
+        if (newTop > maxTop) newTop = maxTop;
+        if (newTop < 0) newTop = 0;
+        slider.style.top = newTop + "px";
+
+        const percentage = ((maxTop - newTop) / maxTop) * 100;
+        updateVolumeDisplay(percentage);
         showVolumePopup();
-      };
-    </script>
+      }
+
+      function onMouseUp(e) {
+        if (e.button !== 0) return;
+        document.removeEventListener("mousemove", moveTo);
+        document.removeEventListener("mouseup", onMouseUp);
+      }
+
+      document.addEventListener("mousemove", moveTo);
+      document.addEventListener("mouseup", onMouseUp);
+
+      const currentTop = parseFloat(slider.style.top) || 0;
+      const currentPercentage = ((maxTop - currentTop) / maxTop) * 100;
+      updateVolumeDisplay(currentPercentage);
+      showVolumePopup();
+    };
+  </script>
 </body>
 
 </html>
