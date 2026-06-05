@@ -1,35 +1,44 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <title>Cassette</title>
-    <style>
-      .button.pressed {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        top: -210px;
-      }
-      @keyframes spin-hub {
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-      .is-playing .white-hub {
-        animation: spin-hub 3s linear infinite;
-      }
 
-      .is-forwarding .white-hub {
-        animation: spin-hub 0.5s linear infinite !important;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <title>Cassette</title>
+  <style>
+    .button.pressed {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      top: -210px;
+    }
 
-      .is-rewinding .white-hub {
-        animation: spin-hub 0.5s linear infinite reverse !important;
+    @keyframes spin-hub {
+      100% {
+        transform: rotate(360deg);
       }
-    </style>
-  </head>
-  <body class="grainy-background">
-    <div class="content">
+    }
+
+    .is-playing .white-hub {
+      animation: spin-hub 3s linear infinite;
+    }
+
+    .is-forwarding .white-hub {
+      animation: spin-hub 0.5s linear infinite !important;
+    }
+
+    .is-rewinding .white-hub {
+      animation: spin-hub 0.5s linear infinite reverse !important;
+    }
+
+    .button:focus-visible {
+      outline: 2px solid blue;
+    }
+  </style>
+</head>
+
+<body class="grainy-background">
+  <div class="content">
+    <div class="player">
       <div class="player">
         <div class="button pause" id="btn-pause">PAUSE</div>
         <div class="button back" id="btn-back">BACK</div>
@@ -68,12 +77,16 @@
       const backBtn = document.getElementById("btn-back");
       const cassetteTape = document.getElementById("cassette-tape");
 
-      playBtn.addEventListener("click", () => {
+
+      const activatePlay = () => {
         playBtn.classList.add("pressed");
         cassetteTape.classList.add("is-playing");
-      });
+      }
 
-      pauseBtn.addEventListener("mousedown", () => {
+      playBtn.addEventListener("click", activatePlay)
+
+
+      const activatePause = () => {
         pauseBtn.classList.add("pressed");
         playBtn.classList.remove("pressed");
         cassetteTape.classList.remove(
@@ -81,41 +94,77 @@
           "is-forwarding",
           "is-rewinding",
         );
-      });
+      };
 
       const stopPause = () => {
         pauseBtn.classList.remove("pressed");
       };
+
+      pauseBtn.addEventListener("mousedown", activatePause)
       pauseBtn.addEventListener("mouseup", stopPause);
       pauseBtn.addEventListener("mouseleave", stopPause);
 
-      fwdBtn.addEventListener("mousedown", () => {
+
+
+      const activateForward = () => {
         fwdBtn.classList.add("pressed");
-        playBtn.classList.remove("pressed");
         cassetteTape.classList.remove("is-playing");
         cassetteTape.classList.add("is-forwarding");
-      });
+      };
 
       const stopForward = () => {
         fwdBtn.classList.remove("pressed");
         cassetteTape.classList.remove("is-forwarding");
       };
+      fwdBtn.addEventListener("mousedown", activateForward);
       fwdBtn.addEventListener("mouseup", stopForward);
       fwdBtn.addEventListener("mouseleave", stopForward);
 
-      backBtn.addEventListener("mousedown", () => {
+
+
+      const activateBackward = () => {
         backBtn.classList.add("pressed");
-        playBtn.classList.remove("pressed");
         cassetteTape.classList.remove("is-playing");
         cassetteTape.classList.add("is-rewinding");
-      });
+      };
 
       const stopBackward = () => {
         backBtn.classList.remove("pressed");
         cassetteTape.classList.remove("is-rewinding");
       };
+
+      backBtn.addEventListener("mousedown", activateBackward);
       backBtn.addEventListener("mouseup", stopBackward);
       backBtn.addEventListener("mouseleave", stopBackward);
+
+
+
+      document.body.addEventListener("keydown", (e) => {
+        e.preventDefault();
+        if (e.repeat) return;
+        if (e.code === "Space") {
+          if (playBtn.classList.contains("pressed")) activatePause();
+          else activatePlay();
+        } else if (e.code === "ArrowRight") {
+          activateForward();
+        } else if (e.code === "ArrowLeft") {
+          activateBackward();
+        } else if (e.code === "KeyP" || e.code === "Enter") {
+          activatePlay();
+        }
+      });
+
+      document.body.addEventListener("keyup", (e) => {
+        e.preventDefault();
+        if (e.code === "Space") {
+          stopPause();
+        } else if (e.code === "ArrowRight") {
+          stopForward();
+        } else if (e.code === "ArrowLeft") {
+          stopBackward();
+        }
+      });
     </script>
-  </body>
+</body>
+
 </html>
